@@ -3,20 +3,30 @@ use rand::Rng;
 pub const WIDTH: usize = 140;
 pub const HEIGHT: usize = 120;
 
-pub struct Grid {
+pub struct Grid<'a> {
     width: usize,
     height: usize,
     data: Vec<Vec<bool>>,
+    shape: &'a str,
 }
 
-impl Grid {
-    pub fn new(width: usize, height: usize, probability: f64) -> Grid {
+impl Grid<'_> {
+    pub fn new(width: usize, height: usize, probability: f64, shape: &str) -> Grid {
         let mut grid = Grid {
             width,
             height,
             data: vec![vec![false; width]; height],
+            shape,
         };
-        grid.generate_random_grid(probability);
+
+        match shape {
+            "random" => { 
+                println!("random");
+                grid.generate_random_grid(probability)
+            },
+            // TODO [NH] fix the shape generation
+            _ => grid.generate_random_grid(probability),
+        }
         grid
     }
 

@@ -11,17 +11,21 @@ struct Args {
     #[arg(short, long, default_value_t = 40)]
     width: usize,
 
-    #[arg(long, default_value_t = 40)]
+    // TODO [NH] fix the short
+    #[arg(short = 'e', long, default_value_t = 40)]
     height: usize,
 
     #[arg(short, long, default_value_t = 0.2)]
     probability: f64,
+
+    #[arg(short, long, default_value_t = String::from("random"))]
+    shape: String,
 }
 
 fn main() {
     let args = Args::parse();
 
-    let mut grid = Grid::new(args.width, args.height, args.probability);
+    let mut grid = Grid::new(args.width, args.height, args.probability, &args.shape);
 
     loop {
         grid.print_grid();
