@@ -1,7 +1,5 @@
 use rand::Rng;
-
-pub const WIDTH: usize = 140;
-pub const HEIGHT: usize = 120;
+use std::fs;
 
 pub struct Grid<'a> {
     width: usize,
@@ -20,14 +18,28 @@ impl Grid<'_> {
         };
 
         match shape {
-            "random" => { 
-                println!("random");
-                grid.generate_random_grid(probability)
-            },
+            "gosper_glider_gun" => {
+                //grid.height = 30;
+                //grid.width = 30;
+                grid.generate_grid("gosper_glider_gun.txt");
+            }
             // TODO [NH] fix the shape generation
             _ => grid.generate_random_grid(probability),
         }
         grid
+    }
+
+    pub fn generate_grid(&mut self, file_path: &str) {
+        let binding =
+            fs::read_to_string(file_path).expect("Should have been able to read the file");
+
+        let lines = binding.lines().collect::<Vec<&str>>();
+
+        for (i, line) in lines.iter().enumerate() {
+            for (j, char) in line.chars().enumerate() {
+                self.data[i][j] = char == 'O';
+            }
+        }
     }
 
     pub fn generate_random_grid(&mut self, probability: f64) {
